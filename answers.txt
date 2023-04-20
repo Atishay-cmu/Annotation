@@ -1,0 +1,1 @@
+['b-f/9.jpg', 'Female', 'African-American', '25', 'Moderate', 'Moderate', 'High', 'No']
