@@ -6,7 +6,7 @@ This repository is part of a bigger project that aims to understand effect of ra
 
 ---------------------------------------------
 
-* The bulk of the code is present in ```test.py``` which contains the streamlit code. 
+* The bulk of the code is present in ```test.py``` as it contains all the streamlit API code.
 
 * The ```style.css``` only contains stylistic code and it non-essential. 
 
