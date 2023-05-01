@@ -1,6 +1,8 @@
 import streamlit as st
 from PIL import Image
+from datetime import datetime
 from random import choice, randint, shuffle
+import pickle as pkl
 import os
 
 # Define a function that will only be executed once
@@ -15,6 +17,7 @@ def setup():
     st.session_state["image"] = image
     st.session_state["current image"] = image[0]
     st.session_state["counter"] = 0
+    st.session_state["saved_data"] = []
 
 # Use session state to keep track of whether setup has been run
 if "setup_has_run" not in st.session_state:
@@ -30,10 +33,16 @@ def intro():
             "All questions are mandatory and you will not be able to complete the survey until you have answered all of them. Thank you for your time and participation.")
     st.write("Please note that you may be shown the same image multiple times, in that case, please try to answer the questions as closely as possible.")
     st.write("Thank you for your time and participation.")
+    st.write("Please enter you prolific ID below.")
+    prolific_id = st.text_input("Prolific ID")
     st.write("Please click on the button below to start the survey.")
     if st.button("Start"):
-        st.session_state["page"] = "survey"
-        st.experimental_rerun()
+        if prolific_id == "":
+            st.error("Please enter your prolific ID.")
+        else:
+            st.session_state['saved_data'].append(["prolific_id", prolific_id])
+            st.session_state["page"] = "survey"
+            st.experimental_rerun()
 
 def logic():
     st.session_state["counter"] += 1
@@ -64,7 +73,7 @@ def survey():
         answers = ["", "African-American", "White", "Hispanic", "Asian", "Other/Prefer not to say"]
         race = st.selectbox(question, answers)
 
-        question = "Please enter the perceived age of the person in the picture?" 
+        question = "Please enter the perceived age of the person in the picture?" + (" "*st.session_state["counter"])
         answer = ["", "18-25", "26-30", "31-35", "36-40", "41-60", "60+"]
         age = st.selectbox(question, answer)
         
@@ -77,14 +86,17 @@ def survey():
         
         submitted = st.form_submit_button("Submit")
         if submitted:
-            # if gender == "":
-            #     st.error("Please select a valid gender")
-            # elif race == "":
-            #     st.error("Please select a valid race")
-            # else:
+            if gender == "":
+                st.error("Please select a valid gender")
+            elif race == "":
+                st.error("Please select a valid race")
+            elif age == "":
+                st.error("Please select a valid age")
+            else:
+                st.session_state["saved_data"].append([st.session_state["current image"], gender, race, age, attractive, intelligent, trustworthy, credible, confident])
                 logic()
                 st.experimental_rerun()
-
+        
 
 def extra_notes():
     st.title("Extra notes")
@@ -93,17 +105,11 @@ def extra_notes():
         notes = st.text_area("Notes")
         submitted = st.form_submit_button("Submit")
         if submitted:
+            st.session_state['saved_data'].append(["extra", notes])
             st.session_state["page"] = "background"
             st.experimental_rerun()
-        submitted = st.form_submit_button("Skip")
-        if submitted:
-            st.session_state["page"] = "background"
-            st.experimental_rerun()
-    # if st.button("Skip"):
-    #     st.session_state["page"] = "background"
-    #     st.experimental_rerun()
 
-def background(): # Do we need a skip button here v/s empty form
+def background(): 
     with st.form("background_form"):
         st.title("Your Background Information")
         st.write("Please enter your background information. " +
@@ -157,11 +163,19 @@ def background(): # Do we need a skip button here v/s empty form
                 st.error("Please select a valid political view")
             else:
                 st.session_state["page"] = "end"
+                st.session_state["saved_data"].append([gender, age, ethinicity, income, education, residence, political])
+                current_time = str(datetime.now())
+                with open('results/' + current_time + '.pkl', 'wb') as f:
+                    pkl.dump(st.session_state["saved_data"], f)
                 st.experimental_rerun()
 
 
 def thank_you():
     st.title("Thank you")
+    st.session_state["completion_code"] = str("C15J0ZO0")
+    st.write("Your participation is greatly appreciated. Please proceed to the following link to complete the study.")
+    st.write("https://app.prolific.co/submissions/complete?cc=C15J0ZO0")
+
 
 
 if st.session_state["page"] == "intro":
