@@ -5,8 +5,11 @@ from random import choice, randint, shuffle
 import pickle as pkl
 import os
 
-# Define a function that will only be executed once
 def setup():
+    '''
+        Define a function that will only be executed once
+        This function will be used to set up the session state and initial variables
+    '''
     image = set()
     while(len(image) < 4):
         img_path = choice(["b-f", "b-m", "w-f", "w-m"])
@@ -20,13 +23,19 @@ def setup():
     st.session_state["counter"] = 0
     st.session_state["saved_data"] = []
 
-# Use session state to keep track of whether setup has been run
+
 if "setup_has_run" not in st.session_state:
+    '''
+        Use session state to keep track of whether setup has been run
+    '''
     st.session_state.setup_has_run = True
     setup()
 
+
 def intro():
-    # The rest of your app goes here
+    '''
+        The purpose of this function is to display the introduction page and collect the prolific ID
+    '''
     st.title("Welcome to the survey!")
     st.write("In this survey, you will be shown 5 images, one at a time. You would be asked a series of questions for each question, " +
             "which you are supposed to answer based solely on the image. Some of these may be subjective, but we would like you to answer them as best as you can. " + 
@@ -44,7 +53,11 @@ def intro():
             st.session_state["page"] = "survey"
             st.experimental_rerun()
 
+
 def logic():
+    '''
+        The purpose of this function is to control the flow of the survey between the different pages
+    '''
     st.session_state["counter"] += 1
     if st.session_state["counter"] == 4:
         st.session_state["current image"] = st.session_state["image"][0]
@@ -53,7 +66,11 @@ def logic():
     else:
         st.session_state["page"] = "extra notes"
 
+
 def survey():
+    '''
+        The purpose of this function is to display the survey page and collect the user responses for each image
+    '''
     with st.form("my_form"):
         st.title('Image annotation survey: Image ' + str(st.session_state["counter"] + 1))
         image = Image.open(st.session_state["current image"])
@@ -99,6 +116,9 @@ def survey():
         
 
 def extra_notes():
+    '''
+        The purpose of this function is to collect any extra notes the user may have about the images
+    '''
     st.title("Extra notes")
     with st.form("extra_notes_form"):
         st.write("Please enter (if any) extra notes/observations about the image that you would like to share with us.")
@@ -109,7 +129,11 @@ def extra_notes():
             st.session_state["page"] = "background"
             st.experimental_rerun()
 
+
 def background(): 
+    '''
+        The purpose of this function is to collect the background information of the user
+    '''
     with st.form("background_form"):
         st.title("Your Background Information")
         st.write("Please enter your background information. " +
@@ -171,6 +195,9 @@ def background():
 
 
 def thank_you():
+    '''
+        The purpose of this function is to thank the user for their participation and provide them with the completion code
+    '''
     st.title("Thank you")
     st.session_state["completion_code"] = str("C15J0ZO0")
     st.write("Your participation is greatly appreciated. Please proceed to the following link to complete the study.")
