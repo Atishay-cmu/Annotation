@@ -176,8 +176,6 @@ def thank_you():
     st.write("Your participation is greatly appreciated. Please proceed to the following link to complete the study.")
     st.write("https://app.prolific.co/submissions/complete?cc=C15J0ZO0")
 
-print("Test")
-
 if st.session_state["page"] == "intro":
     intro()
 elif st.session_state["page"] == "survey":
