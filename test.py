@@ -14,6 +14,7 @@ def setup():
         image.add(os.path.join(img_path, img_name))
     image = list(image)
     shuffle(image)
+    st.session_state["page"] = "intro"
     st.session_state["image"] = image
     st.session_state["current image"] = image[0]
     st.session_state["counter"] = 0
@@ -23,7 +24,6 @@ def setup():
 if "setup_has_run" not in st.session_state:
     st.session_state.setup_has_run = True
     setup()
-    st.session_state["page"] = "intro"
 
 def intro():
     # The rest of your app goes here
@@ -176,7 +176,7 @@ def thank_you():
     st.write("Your participation is greatly appreciated. Please proceed to the following link to complete the study.")
     st.write("https://app.prolific.co/submissions/complete?cc=C15J0ZO0")
 
-
+print("Test")
 
 if st.session_state["page"] == "intro":
     intro()
