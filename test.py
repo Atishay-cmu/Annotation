@@ -25,9 +25,7 @@ def setup():
 
 
 if "setup_has_run" not in st.session_state:
-    '''
-        Use session state to keep track of whether setup has been run
-    '''
+    # Use session state to keep track of whether setup has been run
     st.session_state.setup_has_run = True
     setup()
 
