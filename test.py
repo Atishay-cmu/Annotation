@@ -200,7 +200,8 @@ def thank_you():
     st.title("Thank you")
     st.session_state["completion_code"] = str("C15J0ZO0")
     st.write("Your participation is greatly appreciated. Please proceed to the following link to complete the study.")
-    st.write("https://app.prolific.co/submissions/complete?cc=C15J0ZO0")
+    # st.write("https://app.prolific.co/submissions/complete?cc=C15J0ZO0")
+    st.write("https://app.prolific.co/submissions/complete?cc=C1N6J580")
 
 if st.session_state["page"] == "intro":
     intro()
