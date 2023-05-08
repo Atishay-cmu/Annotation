@@ -41,7 +41,8 @@ def intro():
     st.write("Please note that you may be shown the same image multiple times, in that case, please try to answer the questions as closely as possible.")
     st.write("Thank you for your time and participation.")
     st.write("Please enter you prolific ID below.")
-    prolific_id = st.text_input("Prolific ID")
+    temp_dict = st.experimental_get_query_params()["PROLIFIC_PID"]
+    prolific_id = st.text_input("Prolific ID", value=temp_dict[0] if temp_dict else "")
     st.write("Please click on the button below to start the survey.")
     if st.button("Start"):
         if prolific_id == "":
