@@ -13,18 +13,19 @@ def setup():
     image = set()
     while(len(image) < 4):
         img_path = choice(["b-f", "b-m", "w-f", "w-m"])
-        img_name = choice(os.listdir(img_path)[1:])
-        image.add(os.path.join(img_path, img_name))
+        img_name = choice(os.listdir(img_path)[1:]) # projects: no while loop
+        image.add(os.path.join(img_path, img_name))  
     image = list(image)
     shuffle(image)
+    # All these variables are to save data between pages
     st.session_state["page"] = "intro"
     st.session_state["image"] = image
     st.session_state["current image"] = image[0]
-    st.session_state["counter"] = 0
+    st.session_state["counter"] = 0 # decides which page to show
     st.session_state["saved_data"] = []
 
 
-if "setup_has_run" not in st.session_state:
+if "setup_has_run" not in st.session_state: # only runs once
     # Use session state to keep track of whether setup has been run
     st.session_state.setup_has_run = True
     setup()
@@ -93,7 +94,7 @@ def survey():
         answer = ["", "18-25", "26-30", "31-35", "36-40", "41-60", "60+"]
         age = st.selectbox(question, answer)
         
-        options = ["Very Low", "Low", "Moderate", "High", "Very High"]
+        options = ["Very Low", "Low", "Moderate", "High", "Very High"] # You can change this if you want
         attractive = st.select_slider("Please rate how attractive you think the person is?" + (" "*st.session_state["counter"]), options)
         intelligent = st.select_slider("Please rate how intelligent you think the person is?" + (" "*st.session_state["counter"]), options)
         trustworthy = st.select_slider("Please rate how trustworthy you think the person is?" + (" "*st.session_state["counter"]), options)
@@ -188,7 +189,7 @@ def background():
                 st.session_state["page"] = "end"
                 st.session_state["saved_data"].append([gender, age, ethinicity, income, education, residence, political])
                 current_time = str(datetime.now())
-                with open('results/' + current_time + '.pkl', 'wb') as f:
+                with open('results/' + current_time + '.pkl', 'wb') as f: # Add prolific ID  to the file name
                     pkl.dump(st.session_state["saved_data"], f)
                 st.experimental_rerun()
 
